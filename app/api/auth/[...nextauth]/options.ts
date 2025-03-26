@@ -2,10 +2,12 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import dbConnect from 'lib/Db';
-import UserModel from 'model/User';
+import UserModel, { User } from 'model/User';
 import jwt from "jsonwebtoken"
-// import UserModel from '@/model/User';
-// import dbConnect from '@/lib/Db';
+interface Credentials {
+    identifier: string;
+    password: string;
+}
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -33,7 +35,7 @@ export const authOptions: NextAuthOptions = {
                     if (isPasswordCorrect) {
                         const token = jwt.sign(
                             {
-                                _id: (user as any)._id.toString(),
+                                _id: (user as User)._id.toString(),
                                 mobile: user.mobile,
                                 username: user.username
                             },
@@ -44,8 +46,8 @@ export const authOptions: NextAuthOptions = {
                     } else {
                         throw new Error('Incorrect password');
                     }
-                } catch (err: any) {
-                    throw new Error(err);
+                } catch (err:any) {
+                    throw new AuthError(err);
                 }
             },
         }),

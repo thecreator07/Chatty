@@ -4,7 +4,8 @@
       "lib": ["esnext"],
       "module": "commonjs",
       "types": ["node"],
-      "noEmit": false
+      "noEmit": false,
+      "outDir": "./dist"
     },
     "include": ["server.ts"]
   }

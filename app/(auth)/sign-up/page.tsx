@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 // import { useDebounceCallback } from "usehooks-ts";
 // import {useDebounceValue} from "@hookform/resolvers"
@@ -23,7 +23,7 @@ import {
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import { toast } from "sonner";
-const page = () => {
+const Page = () => {
   const [IsSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
 
@@ -122,4 +122,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
