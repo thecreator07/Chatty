@@ -14,9 +14,10 @@ import {
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { signInSchema } from "schemas/signInSchema";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 export default function SignInForm() {
   const router = useRouter();
 
@@ -47,7 +48,7 @@ console.log("result",result)
     }
 
     if (result?.url) {
-      router.replace("/dashboard");
+      router.push("/dashboard");
     }
   };
 
