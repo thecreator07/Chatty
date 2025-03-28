@@ -12,7 +12,7 @@ export default function SimpleChat() {
   // Receive messages
   useEffect(() => {
     if (!socket) return;
-
+console.log("socket",socket)
     const handleMessage = (newMessage: string) => {
       setMessages(prev => [...prev, newMessage]);
     };

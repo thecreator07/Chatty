@@ -14,10 +14,9 @@ import {
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
 import { signInSchema } from "schemas/signInSchema";
 import { toast } from "sonner";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 export default function SignInForm() {
   const router = useRouter();
 
@@ -28,8 +27,6 @@ export default function SignInForm() {
       password: "",
     },
   });
-
-
   
   //   const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {

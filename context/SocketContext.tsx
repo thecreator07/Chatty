@@ -14,7 +14,7 @@ export const useSocket = () => useContext(SocketContext);
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const { data: session } = useSession();
-console.log(session)
+console.log("session",session)
   useEffect(() => {
     if (session?.user&&session?.user?.token) {
       localStorage.setItem('token', session.user.token);
