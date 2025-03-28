@@ -1,9 +1,9 @@
 // models/User.ts
-import mongoose, { Schema, Document, ObjectId } from 'mongoose';
+import mongoose, { Schema, Document, } from 'mongoose';
 
 
 export interface User extends Document {
-  _id:ObjectId
+  _id:string
   username: string;
   mobile: string;
   password: string;

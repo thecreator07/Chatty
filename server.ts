@@ -9,7 +9,7 @@ import ChatModel from './model/Chat';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
-const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();

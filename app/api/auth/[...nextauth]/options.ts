@@ -1,13 +1,9 @@
-import { NextAuthOptions } from 'next-auth';
+import { NextAuthOptions, User as NextAuthUser } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import dbConnect from 'lib/Db';
-import UserModel, { User } from 'model/User';
-import jwt from "jsonwebtoken"
-interface Credentials {
-    identifier: string;
-    password: string;
-}
+import UserModel, { User as DBUser } from 'model/User';
+import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -18,36 +14,42 @@ export const authOptions: NextAuthOptions = {
                 mobile: { label: 'Phone Number', type: 'text' },
                 password: { label: 'Password', type: 'password' },
             },
-            async authorize(credentials: any): Promise<any> {
+            async authorize(credentials: Record<'mobile' | 'password', string> | undefined): Promise<NextAuthUser | null> {
+                if (!credentials) {
+                    throw new Error('Credentials not provided');
+                }
+
                 await dbConnect();
                 try {
-                    const user = await UserModel.findOne(
-                        { mobile: credentials.identifier });
+                    const user = await UserModel.findOne({ mobile: credentials.mobile });
                     if (!user) {
                         throw new Error('No user found with this number');
                     }
 
-                    const isPasswordCorrect = await bcrypt.compare(
-                        credentials.password,
-                        user.password
-                    );
+                    const isPasswordCorrect = await bcrypt.compare(credentials?.password, user.password);
 
                     if (isPasswordCorrect) {
                         const token = jwt.sign(
                             {
-                                _id: (user as User)._id.toString(),
+                                _id: (user as DBUser)._id.toString(),
                                 mobile: user.mobile,
-                                username: user.username
+                                username: user.username,
                             },
                             process.env.NEXTAUTH_SECRET!,
                             { expiresIn: '30d' }
                         );
-                        return { ...user.toObject(), token }
+                        return {
+                            id: user._id.toString(),
+                            _id: user._id,
+                            mobile: user.mobile,
+                            username: user.username,
+                            token: token,
+                        };
                     } else {
-                        throw new Error('Incorrect password');
+                        return null;
                     }
-                } catch (err:any) {
-                    throw new AuthError(err);
+                } catch (err: unknown) {
+                    throw new Error(err instanceof Error ? err.message : 'Authentication failed');
                 }
             },
         }),
@@ -56,7 +58,7 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token._id = user._id?.toString();
-                token.username = user.username
+                token.username = user.username;
                 token.mobile = user.mobile;
                 token.token = user.token;
             }
@@ -64,10 +66,13 @@ export const authOptions: NextAuthOptions = {
         },
         async session({ session, token }) {
             if (token) {
-                session.user._id = token._id,
-                    session.user.username = token.username,
-                    session.user.mobile = token.mobile,
-                    session.user.token = token.token
+                session.user = {
+                    ...session.user,
+                    _id: token._id,
+                    username: token.username,
+                    mobile: token.mobile,
+                    token: token.token,
+                };
             }
             return session;
         },

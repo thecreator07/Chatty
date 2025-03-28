@@ -27,15 +27,3 @@ declare module 'next-auth/jwt' {
   }
 }
 
-// types/auth.d.ts
-export interface User {
-  _id: string;
-  mobile: string;
-  username: string;
-  password: string;
-}
-
-export interface AuthToken {
-  token: string;
-  expires: Date;
-}
