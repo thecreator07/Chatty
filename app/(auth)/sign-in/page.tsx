@@ -27,18 +27,6 @@ export default function SignInForm() {
       password: "",
     },
   });
-  error
-  : 
-  "Incorrect password"
-  ok
-  : 
-  false
-  status
-  : 
-  401
-  url
-  : 
-  null
 
 
   
