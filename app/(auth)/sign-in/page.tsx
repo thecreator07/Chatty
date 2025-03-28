@@ -27,7 +27,21 @@ export default function SignInForm() {
       password: "",
     },
   });
+  error
+  : 
+  "Incorrect password"
+  ok
+  : 
+  false
+  status
+  : 
+  401
+  url
+  : 
+  null
 
+
+  
   //   const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn("credentials", {
@@ -35,7 +49,7 @@ export default function SignInForm() {
       identifier: data.identifier,
       password: data.password,
     });
-
+console.log("result",result)
     if (result?.error) {
       if (result.error === "CredentialsSignin") {
         toast(`login failed- Incorrect username or password`);
