@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   // Required for custom server
   // output: 'standalone',
   // Optional: Add if using API routes with websockets
